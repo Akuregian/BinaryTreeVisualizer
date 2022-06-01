@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-file(GLOB_RECURSE HEADERS "Headers/*.h")
+file(GLOB_RECURSE HEADERS "Headers/*.hpp")
 file(GLOB_RECURSE SRC "Source/*.cpp")
 
 # Add source to this project's executable.
@@ -21,3 +21,10 @@ target_link_libraries(BinaryTreeVisualizer PRIVATE imgui::imgui)
 
 find_package(glfw3 CONFIG REQUIRED)
 target_link_libraries(BinaryTreeVisualizer PRIVATE glfw)
+
+find_package(SFML COMPONENTS system window graphics CONFIG REQUIRED)
+target_link_libraries(BinaryTreeVisualizer PRIVATE sfml-system sfml-network sfml-graphics sfml-window)
+
+find_package(ImGui-SFML CONFIG REQUIRED)
+target_link_libraries(BinaryTreeVisualizer PRIVATE ImGui-SFML::ImGui-SFML)
+

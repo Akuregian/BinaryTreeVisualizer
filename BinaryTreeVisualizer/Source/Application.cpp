@@ -1,64 +1,56 @@
 ﻿// BinaryTreeVisualizer.cpp : Defines the entry point for the application.
 //
 
-#include "../Headers/ImGUI_Interface.h"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
+//#include "../Headers/ImGUI_Interface.h"
+//#include "glad/glad.h"
+//#include "GLFW/glfw3.h"
+#include "../Headers/Interface.hpp"
+#include "../Headers/Settings.hpp"
+#include <imgui-SFML.h>
+#include <SFML/Graphics.hpp>
 
 
 int main(int, char**)
 {
-	// Setup window
-	if (!glfwInit())
-		return 1;
 
-	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	// SFML Window
+	sf::RenderWindow window(sf::VideoMode(SettingsPanel::sWidth, SettingsPanel::sHeight), "Window title");
 
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	// ImGui Window
+	ImGui::SFML::Init(window);
 
+	// Binary Tree
+	std::shared_ptr<TreeType::BinaryTree> bTree;
+	std::shared_ptr<TreeType::BinaryTree> Root;
 
-	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui - Example", NULL, NULL);
-	if (window == NULL)
-		return 1;
+	// GUI_Interface
+	std::shared_ptr<Interface::ImGUI> GUI = std::make_shared<Interface::ImGUI>();
 
-	glfwMakeContextCurrent(window);
-	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	glfwSwapInterval(1); // Enable vsync
+	sf::Clock DeltaTime;
 
-	int screen_width, screen_height;
-	glfwGetFramebufferSize(window, &screen_width, &screen_height);
-	glViewport(0, 0, screen_width, screen_height);
-
-	MyGUI::GUI_INTERFACE App;
-	App.Init(window, glsl_version);
-
-	while (!glfwWindowShouldClose(window))
+	while (window.isOpen())
 	{
-		glfwPollEvents();
-		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		sf::Event events;
+		while (window.pollEvent(events))
+		{
+			// Process Events for ImGui
+			ImGui::SFML::ProcessEvent(events);
+			if (events.type == sf::Event::Closed)
+				window.close();
+		}
 
-		App.NewFrame();
+		ImGui::SFML::Update(window, DeltaTime.restart());
 
-		// Code Goes Here
-		App.Update();
+		// ImGui Stuff
+		GUI->NodeWindow(bTree, Root);
 
-		App.Render(window);
-		int display_w, display_h;
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		glfwSwapBuffers(window);
+		window.clear(sf::Color(210, 210, 210));
 
+		ImGui::SFML::Render(window); // Render last so it doesnt get covered up
+		window.display();
 	}
+	
+	ImGui::SFML::Shutdown();
 
-	App.Shutdown();
-    return 0;
+	return 0;
 }
