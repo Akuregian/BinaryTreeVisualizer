@@ -1,0 +1,13 @@
+{
+  "name": "binarytreevisualizer",
+  "version": "1.0",
+  "dependencies": [
+    {
+      "name": "imgui",
+      "features": [ "glfw-binding", "opengl3-binding", "docking-experimental" ]
+
+    },
+    "glfw3",
+    "glad"
+  ]
+}
