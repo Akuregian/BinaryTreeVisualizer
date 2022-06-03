@@ -18,7 +18,7 @@ namespace Interface
 			if (!Root) { Root = Root->InsertNode(Root, InsertValue); }
 			else { Root->InsertNode(Root, InsertValue); }
 			SFML::PreOrder(Root);
-			while (SFML::Animate(window)) { }
+			//while (SFML::Animate(window)) { }
 		}
 		// Delete Nodes
 		ImGui::InputInt("DeleteValue", &DeleteValue);
@@ -46,9 +46,11 @@ namespace Interface
 	sf::Time SFML::m_time;
 	float SFML::animate_time = 0.1f;
 	std::stack<std::shared_ptr<Interface::CircleText>> SFML::AnimationStack;
+	sf::RenderWindow* SFML::ref_window;
 
-	SFML::SFML() 
+	SFML::SFML(sf::RenderWindow& window) 
 	{
+		ref_window = &window;
 		if (!m_font.loadFromFile("../../../../BinaryTreeVisualizer/Fonts/BodoniFLF-Bold.ttf"))
 		{
 			std::cout << "Error Loading Font" << std::endl;
@@ -60,32 +62,56 @@ namespace Interface
 		// return if tree is null
 		if (root == nullptr) { return; }
 		
-		// print nodes data value
-		CreateNode(root, root->data, sf::Vector2f(100, 100), 20, sf::Color::Green);
+		std::cout << "Root(" << root->data << " ) : Direction [" << root->dir << "]" << std::endl;
+
+		CreateNode(root, sf::Vector2f(100, 100), 20);
 
 		// Recur Left
 		PreOrder(root->left_node);
 
 		// Recur Right
 		PreOrder(root->right_node);
-
 	}
 
-	void SFML::CreateNode(std::shared_ptr<TreeType::BinaryTree> root, int data, sf::Vector2f pos, int radius, sf::Color col)
+	void SFML::CreateNode(std::shared_ptr<TreeType::BinaryTree> root, sf::Vector2f pos, int radius)
 	{
+
 		// Create Objects [Circle, Text]
 		std::shared_ptr<CircleText> circle_text = std::make_shared<CircleText>();
 		std::shared_ptr<sf::CircleShape> Node = std::make_shared<sf::CircleShape>(radius, 100);
 
-		// Initialize Circle Object
-		Node->setPosition(pos);
-		Node->setFillColor(col);
-		Node->setOrigin(Node->getRadius() - 15, Node->getRadius() - 30);
+		if (root->dir == 0) // Root Node
+		{
+			// Initialize Root Node
+			Node->setPosition(ref_window->getSize().x / 2, 20);
+			Node->setFillColor(sf::Color::Blue);
+			Node->setOrigin(Node->getRadius() - 15, Node->getRadius() - 30);
+		}
+		else if (root->dir == 1) // Left Node
+		{
+			// Initialize Left Node
+			Node->setPosition((ref_window->getSize().x / 2) - 50, 50);
+			Node->setFillColor(sf::Color::Red);
+			Node->setOrigin(Node->getRadius() - 15, Node->getRadius() - 30);
+		}
+		else if (root->dir == 2) // Left Node
+		{
+			// Initialize Right Node
+			Node->setPosition((ref_window->getSize().x / 2) + 50, 50);
+			Node->setFillColor(sf::Color::Green);
+			Node->setOrigin(Node->getRadius() - 15, Node->getRadius() - 30);
+		}
 
 		// Initlialize Text Object
 		sf::Text text;
 		text.setFont(m_font);
-		text.setString(std::to_string(data));
+		if (root->dir == 1)
+			text.setString("Left");
+		else if (root->dir == 2)
+			text.setString("Right");
+		else if(root->dir == 0)
+			text.setString("Root");
+
 		text.setPosition(Node->getPosition().x, Node->getPosition().y);
 		text.setFillColor(sf::Color::Black);
 		text.setScale(1.5, 1.5);
@@ -101,7 +127,7 @@ namespace Interface
 		AnimationStack.push(circle_text);
 	}
 
-	bool SFML::Animate(sf::RenderWindow& window)
+	bool SFML::Animate()
 	{
 		m_time = m_clock.restart();
 		duration += m_time.asSeconds();
@@ -112,14 +138,14 @@ namespace Interface
 			
 			if (current_frame < 9)
 			{
-				window.clear();
+				ref_window->clear();
 				std::cout << "Animating" << std::endl;
 				std::shared_ptr<Interface::CircleText> tmp = AnimationStack.top();
 				tmp->circle->move(sf::Vector2f(20, 20));
 				tmp->text.move(sf::Vector2f(20, 20));
-				window.draw(*tmp->circle);
-				window.draw(tmp->text);
-				window.display();
+				ref_window->draw(*tmp->circle);
+				ref_window->draw(tmp->text);
+				ref_window->display();
 				
 				current_frame += 1;
 				return true;
@@ -134,12 +160,12 @@ namespace Interface
 		}
 	}
 
-	void SFML::DrawNodes(sf::RenderWindow& window, std::shared_ptr<TreeType::BinaryTree> root)
+	void SFML::DrawNodes(std::shared_ptr<TreeType::BinaryTree> root)
 	{
 		for (unsigned int i = 0; i < NodesArray.size(); i++)
 		{
-			window.draw(*NodesArray[i]->circle);
-			window.draw(NodesArray[i]->text);
+			ref_window->draw(*NodesArray[i]->circle);
+			ref_window->draw(NodesArray[i]->text);
 		}
 	}
 	

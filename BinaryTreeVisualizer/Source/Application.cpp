@@ -19,7 +19,7 @@ int main(int, char**)
 
 	// GUI_Interface
 	std::shared_ptr<Interface::ImGUI> GUI = std::make_shared<Interface::ImGUI>();
-	std::shared_ptr<Interface::SFML> SFML = std::make_shared<Interface::SFML>();
+	std::shared_ptr<Interface::SFML> SFML = std::make_shared<Interface::SFML>(window);
 
 	// DeltaTime Used to Render ImGUI windows
 	sf::Clock DeltaTime;
@@ -42,7 +42,7 @@ int main(int, char**)
 
 		window.clear(sf::Color(210, 210, 210));
 
-		SFML->DrawNodes(window, GUI->Root);
+		SFML->DrawNodes(GUI->Root);
 
 		ImGui::SFML::Render(window); // Render last so it doesnt get covered up
 		window.display();

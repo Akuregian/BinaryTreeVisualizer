@@ -4,6 +4,14 @@
 
 namespace TreeType
 {
+	enum RootDir
+	{
+		ROOT, // 0
+		LEFT, // 1
+		RIGHT, // 2
+		NONE
+	};
+
 	class BinaryTree
 	{
 	public:
@@ -21,5 +29,6 @@ namespace TreeType
 		std::shared_ptr<BinaryTree> left_node;
 		std::shared_ptr<BinaryTree> right_node;
 		int data;
+		RootDir dir;
 	};
 }

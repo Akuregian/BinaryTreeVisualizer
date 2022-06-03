@@ -3,13 +3,13 @@
 namespace TreeType
 {
 	BinaryTree::BinaryTree()
-		: data(0), left_node(nullptr), right_node(nullptr)
+		: data(0), left_node(nullptr), right_node(nullptr), dir(RootDir::ROOT)
 	{
 
 	}
 	
 	BinaryTree::BinaryTree(int data)
-		: data(data), left_node(nullptr), right_node(nullptr)
+		: data(data), left_node(nullptr), right_node(nullptr), dir(RootDir::ROOT)
 	{
 
 	}
@@ -22,10 +22,10 @@ namespace TreeType
 		if (!root) { return std::make_shared<BinaryTree>(value); }
 
 		// If Value > root.Value : Insert Right
-		if (value > root->data) { root->right_node = InsertNode(root->right_node, value); }
+		if (value > root->data) { root->right_node = InsertNode(root->right_node, value); root->right_node->dir = RIGHT; }
 
 		// If Value < root.Value : Insert Left
-		if (value < root->data) { root->left_node = InsertNode(root->left_node, value); }
+		if (value < root->data) { root->left_node = InsertNode(root->left_node, value); root->left_node->dir = LEFT; }
 
 		return root;
 	}
