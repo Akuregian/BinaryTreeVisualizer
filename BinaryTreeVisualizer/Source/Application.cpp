@@ -38,7 +38,7 @@ int main(int, char**)
 		ImGui::SFML::Update(window, DeltaTime.restart());
 
 		// ImGui Stuff
-		GUI->NodeWindow();
+		GUI->NodeWindow(window);
 
 		window.clear(sf::Color(210, 210, 210));
 
