@@ -5,7 +5,6 @@
 //#include "glad/glad.h"
 //#include "GLFW/glfw3.h"
 #include "../Headers/Interface.hpp"
-#include "../Headers/Settings.hpp"
 #include <imgui-SFML.h>
 
 

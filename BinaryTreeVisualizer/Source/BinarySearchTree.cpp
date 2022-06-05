@@ -3,13 +3,19 @@
 namespace TreeType
 {
 	BinaryTree::BinaryTree()
-		: data(0), left_node(nullptr), right_node(nullptr), dir(RootDir::ROOT)
+		: left_node(nullptr), 
+		  right_node(nullptr), 
+		  dir(RootDir::ROOT),
+		  nodeObject(std::make_shared<Object::Node>(0))
 	{
 
 	}
 	
 	BinaryTree::BinaryTree(int data)
-		: data(data), left_node(nullptr), right_node(nullptr), dir(RootDir::ROOT)
+		: left_node(nullptr), 
+		  right_node(nullptr), 
+		  dir(RootDir::ROOT), 
+		  nodeObject(std::make_shared<Object::Node>(data))
 	{
 
 	}
@@ -22,10 +28,10 @@ namespace TreeType
 		if (!root) { return std::make_shared<BinaryTree>(value); }
 
 		// If Value > root.Value : Insert Right
-		if (value > root->data) { root->right_node = InsertNode(root->right_node, value); root->right_node->dir = RIGHT; }
+		if (value > root->nodeObject->data) { root->right_node = InsertNode(root->right_node, value); root->right_node->dir = RIGHT; }
 
 		// If Value < root.Value : Insert Left
-		if (value < root->data) { root->left_node = InsertNode(root->left_node, value); root->left_node->dir = LEFT; }
+		if (value < root->nodeObject->data) { root->left_node = InsertNode(root->left_node, value); root->left_node->dir = LEFT; }
 
 		return root;
 	}
@@ -36,8 +42,8 @@ namespace TreeType
 		if (root == nullptr) { return root; };
 
 		// Find Node to be deleted
-		if (key < root->data) { root->left_node = DeleteNode(root->right_node, key); }
-		else if (key > root->data) { root->right_node = DeleteNode(root->right_node, key); }
+		if (key < root->nodeObject->data) { root->left_node = DeleteNode(root->right_node, key); }
+		else if (key > root->nodeObject->data) { root->right_node = DeleteNode(root->right_node, key); }
 		else {
 			// node has no child
 			if (root->left_node == nullptr && root->right_node == nullptr)
@@ -59,9 +65,9 @@ namespace TreeType
 
 			std::shared_ptr<BinaryTree> temp = MinimumValueNode(root->right_node);
 
-			root->data = temp->data;
+			root->nodeObject->data = temp->nodeObject->data;
 
-			root->right_node = DeleteNode(root->right_node, temp->data);
+			root->right_node = DeleteNode(root->right_node, temp->nodeObject->data);
 		}
 
 		return root;
@@ -71,7 +77,7 @@ namespace TreeType
 	{
 		if (!root) { return; }
 		InOrder(root->left_node);
-		std::cout << root->data << std::endl;
+		std::cout << root->nodeObject->data << std::endl;
 		InOrder(root->right_node);
 	}
 

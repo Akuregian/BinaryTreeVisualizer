@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include <iostream>
+#include "../Headers/Node.hpp"
 
 namespace TreeType
 {
@@ -28,7 +28,7 @@ namespace TreeType
 
 		std::shared_ptr<BinaryTree> left_node;
 		std::shared_ptr<BinaryTree> right_node;
-		int data;
 		RootDir dir;
+		std::shared_ptr<Object::Node> nodeObject;
 	};
 }
