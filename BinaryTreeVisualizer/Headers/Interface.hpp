@@ -23,10 +23,11 @@ namespace Interface
 	public:
 		SFML(sf::RenderWindow& window);
 		// Recurse the Binary tree in PreOrder
-		static void PreOrder(std::shared_ptr<TreeType::BinaryTree> root);
 		static void WalkTree(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node);
 		static void CreateChildrenNodes(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node);
 		static void DrawNodes(std::shared_ptr<TreeType::BinaryTree> root);
+		static void DrawLines(std::shared_ptr<TreeType::BinaryTree> root);
+		static void Display(std::shared_ptr<TreeType::BinaryTree> root);
 		static bool Animate();
 
 	private:
@@ -39,6 +40,5 @@ namespace Interface
 		static sf::RenderWindow* ref_window;
 		static sf::Vector2f LEFT_OFFSET;
 		static sf::Vector2f RIGHT_OFFSET;
-
 	};
 }

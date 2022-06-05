@@ -17,7 +17,6 @@ namespace Interface
 			std::cout << "Added Node" << std::endl;
 			if (!Root) { Root = Root->InsertNode(Root, InsertValue); }
 			else { Root->InsertNode(Root, InsertValue); }
-			//SFML::PreOrder(Root, NULL);
 			SFML::WalkTree(Root, NULL);
 
 			//while (SFML::Animate(window)) { }
@@ -39,7 +38,7 @@ namespace Interface
 
 	// ==================== SFML ======================
 
-	// Static Vars
+	// Static Variables
 	sf::Font SFML::m_font;
 	sf::Clock SFML::m_clock;
 	float SFML::duration = float();
@@ -47,14 +46,10 @@ namespace Interface
 	sf::Time SFML::m_time;
 	float SFML::animate_time = 0.1f;
 	sf::RenderWindow* SFML::ref_window;
-	sf::Vector2f SFML::LEFT_OFFSET(SettingsPanel::offset, SettingsPanel::offset);
-	sf::Vector2f SFML::RIGHT_OFFSET(-SettingsPanel::offset, SettingsPanel::offset);
+	sf::Vector2f SFML::LEFT_OFFSET(-SettingsPanel::offset, SettingsPanel::offset);
+	sf::Vector2f SFML::RIGHT_OFFSET(SettingsPanel::offset, SettingsPanel::offset);
 
-	SFML::SFML(sf::RenderWindow& window)
-	{
-		int off = 40;
-		ref_window = &window;
-	}
+	SFML::SFML(sf::RenderWindow& window) { ref_window = &window; }
 
 	void SFML::WalkTree(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node)
 	{
@@ -70,41 +65,26 @@ namespace Interface
 			WalkTree(root->right_node, root);
 	}
 
-	void SFML::PreOrder(std::shared_ptr<TreeType::BinaryTree> root)
-	{
-		// return if tree is null
-		if (root == nullptr) { return; }
-		
-		// Create Children Nodes
-	//	CreateChildrenNodes(root);
-
-		// Recur Left
-		PreOrder(root->left_node);
-
-		// Recur Right
-		PreOrder(root->right_node);
-	}
-
 	void SFML::CreateChildrenNodes(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node)
 	{
 
 		if (root->dir == TreeType::ROOT && !parent_node)
 		{
 			std::cout << "Creating Root Node" << std::endl;
-			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20));
+			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20), sf::Vector2f(ref_window->getPosition().x, 20), root->dir);
 			return;
 		}
 
 		if (root->dir == TreeType::LEFT)
 		{
 			std::cout << "Creating Left Node" << std::endl;
-			root->nodeObject->CreateNode(parent_node->nodeObject->position + LEFT_OFFSET);
+			root->nodeObject->CreateNode(parent_node->nodeObject->position + LEFT_OFFSET, parent_node->nodeObject->position, root->dir);
 		}
 
 		if (root->dir == TreeType::RIGHT)
 		{
 			std::cout << "Creating Right Node" << std::endl;
-			root->nodeObject->CreateNode(parent_node->nodeObject->position + RIGHT_OFFSET);
+			root->nodeObject->CreateNode(parent_node->nodeObject->position + RIGHT_OFFSET, parent_node->nodeObject->position, root->dir);
 		}
 
 	}
@@ -148,13 +128,27 @@ namespace Interface
 	{
 		if (!root) { return; }
 
-
 		ref_window->draw(*root->nodeObject->node_object);
 		ref_window->draw(root->nodeObject->text);
 
 		DrawNodes(root->right_node);
 		DrawNodes(root->left_node);
+	}
+	void SFML::DrawLines(std::shared_ptr<TreeType::BinaryTree> root) 
+	{
+		if (!root) { return; }
 
+		if(root->nodeObject->connection)
+			ref_window->draw(*root->nodeObject->connection);
+
+		DrawLines(root->right_node);
+		DrawLines(root->left_node);
+	}
+
+	void SFML::Display(std::shared_ptr<TreeType::BinaryTree> root)
+	{
+		DrawLines(root);
+		DrawNodes(root);
 	}
 	
 }

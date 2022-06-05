@@ -41,7 +41,7 @@ int main(int, char**)
 
 		window.clear(sf::Color(210, 210, 210));
 
-		SFML->DrawNodes(GUI->Root);
+		SFML->Display(GUI->Root);
 
 		ImGui::SFML::Render(window); // Render last so it doesnt get covered up
 		window.display();
