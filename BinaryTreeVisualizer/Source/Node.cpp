@@ -36,9 +36,9 @@ namespace Object
 		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(distance_to_other_node, 5));
 		connection->setPosition(parent_pos.x + node_object->getRadius(), parent_pos.y + node_object->getRadius());
 		connection->setFillColor(sf::Color::Black);
-		if (dir == 2)
+		if (dir == 2) // right_node
 			connection->rotate(45);
-		else
+		else // left_node
 			connection->rotate(135);
 	}
 }

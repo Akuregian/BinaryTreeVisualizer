@@ -46,33 +46,52 @@ namespace TreeType
 		if (!root) { return root; };
 
 		// Find Node to be deleted
-		if (key < root->nodeObject->data) { root->left_node = DeleteNode(root->left_node, key); }
-		else if (key > root->nodeObject->data) { root->right_node = DeleteNode(root->right_node, key);  }
-		else {
-			// node has no child
-			if (!root->left_node && !root->right_node)
-			{
-				return nullptr;
-			}
-			else if (!root->left_node)
-			{
-				std::shared_ptr<BinaryTree> temp = root->right_node;
-				root.reset();
-				return temp;
-			}
-			else if (!root->right_node)
-			{
-				std::shared_ptr<BinaryTree> temp = root->left_node;
-				root.reset();
-				return temp;
-			}
-
-			std::shared_ptr<BinaryTree> temp = MinimumValueNode(root->right_node);
-			root->nodeObject->data = temp->nodeObject->data;
-			root->right_node = DeleteNode(root->right_node, temp->nodeObject->data);
+		if (key < root->nodeObject->data) 
+		{ 
+			root->left_node = DeleteNode(root->left_node, key); 
+			return root;
+		}
+		else if (key > root->nodeObject->data) 
+		{ 
+			root->right_node = DeleteNode(root->right_node, key); 
+			return root;
 		}
 
-		return root;
+		// node has no child
+		if (!root->left_node)
+		{
+			std::shared_ptr<BinaryTree> temp = root->right_node;
+			root.reset();
+			return temp;
+		}
+		else if (!root->right_node)
+		{
+			std::shared_ptr<BinaryTree> temp = root->left_node;
+			root.reset();
+			return temp;
+		}
+		else
+		{
+			// Find Successor
+			std::shared_ptr<TreeType::BinaryTree> successor_Parent = root;
+			std::shared_ptr<TreeType::BinaryTree> successor = root->right_node;
+
+			while(successor->left_node)
+			{
+				successor_Parent = successor;
+				successor = successor->left_node;
+			}
+
+			if (successor_Parent != root)
+				successor_Parent->left_node = successor->right_node;
+			else
+				successor_Parent->right_node = successor->left_node;
+
+			root->nodeObject->data = successor->right_node->nodeObject->data;
+			successor.reset();
+
+			return root;
+		}
 	}
 	
 	void BinaryTree::InOrder(std::shared_ptr<BinaryTree> root)
@@ -82,16 +101,5 @@ namespace TreeType
 		std::cout << root->nodeObject->data << std::endl;
 		InOrder(root->right_node);
 	}
-
-	std::shared_ptr<BinaryTree> BinaryTree::MinimumValueNode(std::shared_ptr<BinaryTree> root)
-	{
-		while (root && root->left_node)
-		{
-			root = root->left_node;
-		}
-		return root;
-	}
-
-
 
 }
