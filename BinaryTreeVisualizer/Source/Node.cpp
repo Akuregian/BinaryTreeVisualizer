@@ -13,7 +13,7 @@ namespace Object
 		}
 	};
 
-	void Node::CreateNode(sf::Vector2f pos, sf::Vector2f parent_pos, int dir)
+	void Node::CreateNode(sf::Vector2f pos, sf::Vector2f parent_pos, int dir, int level)
 	{
 		// CircleShape Node
 		position = pos;
@@ -29,10 +29,11 @@ namespace Object
 		text.setPosition(node_object->getPosition().x + (node_object->getRadius() /2) ,node_object->getPosition().y + (node_object->getRadius() / 2));
 		text.setFillColor(sf::Color::Black);
 		
-		if (parent_pos == pos)
+		if (dir == 0)
 			return;
 
-		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(50, 5));
+		int distance_to_other_node = std::sqrt(std::pow(pos.x - parent_pos.x, 2) + std::pow(pos.y - parent_pos.y, 2));
+		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(distance_to_other_node, 5));
 		connection->setPosition(parent_pos.x + node_object->getRadius(), parent_pos.y + node_object->getRadius());
 		connection->setFillColor(sf::Color::Black);
 		if (dir == 2)

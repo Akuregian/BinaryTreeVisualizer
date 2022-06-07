@@ -37,31 +37,30 @@ namespace TreeType
 			root->left_node->level = ref_level--;
 		}
 
-		
 		return root;
 	}
 
 	// Delete a Node
 	std::shared_ptr<BinaryTree> BinaryTree::DeleteNode(std::shared_ptr<BinaryTree> root, int key)
 	{
-		if (root == nullptr) { return root; };
+		if (!root) { return root; };
 
 		// Find Node to be deleted
-		if (key < root->nodeObject->data) { root->left_node = DeleteNode(root->right_node, key); }
-		else if (key > root->nodeObject->data) { root->right_node = DeleteNode(root->right_node, key); }
+		if (key < root->nodeObject->data) { root->left_node = DeleteNode(root->left_node, key); }
+		else if (key > root->nodeObject->data) { root->right_node = DeleteNode(root->right_node, key);  }
 		else {
 			// node has no child
-			if (root->left_node && root->right_node)
+			if (!root->left_node && !root->right_node)
 			{
 				return nullptr;
 			}
-			else if (root->left_node)
+			else if (!root->left_node)
 			{
 				std::shared_ptr<BinaryTree> temp = root->right_node;
 				root.reset();
 				return temp;
 			}
-			else if (root->right_node)
+			else if (!root->right_node)
 			{
 				std::shared_ptr<BinaryTree> temp = root->left_node;
 				root.reset();
@@ -69,9 +68,7 @@ namespace TreeType
 			}
 
 			std::shared_ptr<BinaryTree> temp = MinimumValueNode(root->right_node);
-
 			root->nodeObject->data = temp->nodeObject->data;
-
 			root->right_node = DeleteNode(root->right_node, temp->nodeObject->data);
 		}
 
@@ -88,7 +85,7 @@ namespace TreeType
 
 	std::shared_ptr<BinaryTree> BinaryTree::MinimumValueNode(std::shared_ptr<BinaryTree> root)
 	{
-		while (root != nullptr && root->left_node != nullptr)
+		while (root && root->left_node)
 		{
 			root = root->left_node;
 		}
