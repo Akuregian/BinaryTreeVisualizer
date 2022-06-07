@@ -2,37 +2,42 @@
 
 namespace TreeType
 {
-	BinaryTree::BinaryTree()
-		: left_node(nullptr), 
-		  right_node(nullptr), 
-		  dir(RootDir::ROOT),
-		  nodeObject(std::make_shared<Object::Node>(0))
-	{
-
-	}
 	
 	BinaryTree::BinaryTree(int data)
 		: left_node(nullptr), 
 		  right_node(nullptr), 
 		  dir(RootDir::ROOT), 
-		  nodeObject(std::make_shared<Object::Node>(data))
+		  nodeObject(std::make_shared<Object::Node>(data)), 
+		  level(0)
 	{
 
 	}
 
 	BinaryTree::~BinaryTree() { }
 
-	std::shared_ptr<BinaryTree> BinaryTree::InsertNode(std::shared_ptr<BinaryTree> root, int value)
+	std::shared_ptr<BinaryTree> BinaryTree::InsertNode(std::shared_ptr<BinaryTree> root, int value, int ref_level)
 	{
 		//Insert into First node if Root is null
-		if (!root) { return std::make_shared<BinaryTree>(value); }
+		if (!root) {  return std::make_shared<BinaryTree>(value); }
+		ref_level++;
 
 		// If Value > root.Value : Insert Right
-		if (value > root->nodeObject->data) { root->right_node = InsertNode(root->right_node, value); root->right_node->dir = RIGHT; }
+		if (value > root->nodeObject->data) 
+		{ 
+			root->right_node = InsertNode(root->right_node, value, ref_level); 
+			root->right_node->dir = RIGHT; 
+			root->right_node->level = ref_level--;
+		}
 
 		// If Value < root.Value : Insert Left
-		if (value < root->nodeObject->data) { root->left_node = InsertNode(root->left_node, value); root->left_node->dir = LEFT; }
+		if (value < root->nodeObject->data) 
+		{ 
+			root->left_node = InsertNode(root->left_node, value, ref_level);
+			root->left_node->dir = LEFT; 
+			root->left_node->level = ref_level--;
+		}
 
+		
 		return root;
 	}
 
@@ -46,17 +51,17 @@ namespace TreeType
 		else if (key > root->nodeObject->data) { root->right_node = DeleteNode(root->right_node, key); }
 		else {
 			// node has no child
-			if (root->left_node == nullptr && root->right_node == nullptr)
+			if (root->left_node && root->right_node)
 			{
 				return nullptr;
 			}
-			else if (root->left_node == nullptr)
+			else if (root->left_node)
 			{
 				std::shared_ptr<BinaryTree> temp = root->right_node;
 				root.reset();
 				return temp;
 			}
-			else if (root->right_node == nullptr)
+			else if (root->right_node)
 			{
 				std::shared_ptr<BinaryTree> temp = root->left_node;
 				root.reset();

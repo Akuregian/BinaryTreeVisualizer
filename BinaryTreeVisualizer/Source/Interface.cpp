@@ -12,13 +12,13 @@ namespace Interface
 
 		// Add Nodes
 		ImGui::InputInt("InsertValue", &InsertValue);
-		if(ImGui::Button("Add Node"))
+		if (ImGui::Button("Add Node"))
 		{
+			int ref_level = 0;
 			std::cout << "Added Node" << std::endl;
-			if (!Root) { Root = Root->InsertNode(Root, InsertValue); }
-			else { Root->InsertNode(Root, InsertValue); }
+			if (!Root) { Root = Root->InsertNode(Root, InsertValue, ref_level); }
+			else { Root->InsertNode(Root, InsertValue, ref_level); }
 			SFML::WalkTree(Root, NULL);
-
 			//while (SFML::Animate(window)) { }
 		}
 		// Delete Nodes
@@ -54,14 +54,14 @@ namespace Interface
 	void SFML::WalkTree(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node)
 	{
 		// Recurse Left
-		if (root->left_node != nullptr)
+		if (root->left_node)
 			WalkTree(root->left_node, root);
 
 		// Create Objects 
 		CreateChildrenNodes(root, parent_node);
 
 		// Recurse Right
-		if (root->right_node != nullptr)
+		if (root->right_node)
 			WalkTree(root->right_node, root);
 	}
 
@@ -70,20 +70,20 @@ namespace Interface
 
 		if (root->dir == TreeType::ROOT && !parent_node)
 		{
-			std::cout << "Creating Root Node" << std::endl;
+			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << std::endl;
 			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20), sf::Vector2f(ref_window->getPosition().x, 20), root->dir);
 			return;
 		}
 
 		if (root->dir == TreeType::LEFT)
 		{
-			std::cout << "Creating Left Node" << std::endl;
+			std::cout << "Creating Left (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + LEFT_OFFSET, parent_node->nodeObject->position, root->dir);
 		}
 
 		if (root->dir == TreeType::RIGHT)
 		{
-			std::cout << "Creating Right Node" << std::endl;
+			std::cout << "Creating Right (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + RIGHT_OFFSET, parent_node->nodeObject->position, root->dir);
 		}
 

@@ -5,7 +5,7 @@ namespace Object
 	Node::Node(int value)
 		: node_object(std::make_shared<sf::CircleShape>()),
 		  connection(NULL),
-		  data(value)
+	   	  data(value)
 	{
 		if (!font.loadFromFile("../../../../BinaryTreeVisualizer/Fonts/BodoniFLF-Bold.ttf"))
 		{
@@ -31,8 +31,6 @@ namespace Object
 		
 		if (parent_pos == pos)
 			return;
-	//	connection->setSize(sf::Vector2f(node_object->getPosition().x + node_object->getRadius(),
-	//										  node_object->getPosition().y + node_object->getRadius()));
 
 		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(50, 5));
 		connection->setPosition(parent_pos.x + node_object->getRadius(), parent_pos.y + node_object->getRadius());

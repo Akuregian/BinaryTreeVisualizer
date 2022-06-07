@@ -6,16 +6,16 @@ namespace Interface
 {
 	class ImGUI
 	{
-		public:
-			ImGUI();
-			void NodeWindow(sf::RenderWindow& window);
+	public:
+		ImGUI();
+		void NodeWindow(sf::RenderWindow& window);
 
-			// Binary Tree
-			std::shared_ptr<TreeType::BinaryTree> Root;
+		// Binary Tree
+		std::shared_ptr<TreeType::BinaryTree> Root;
 
-			// Variables
-			int InsertValue;
-			int DeleteValue;
+		// Variables
+		int InsertValue;
+		int DeleteValue;
 	};
 
 	class SFML
