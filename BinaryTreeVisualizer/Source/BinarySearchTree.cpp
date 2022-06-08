@@ -45,19 +45,19 @@ namespace TreeType
 	{
 		if (!root) { return root; };
 
-		// Find Node to be deleted
-		if (key < root->nodeObject->data) 
+		// Recursive Call To Find Node to be deleted
+		if (root->nodeObject->data > key) 
 		{ 
 			root->left_node = DeleteNode(root->left_node, key); 
 			return root;
 		}
-		else if (key > root->nodeObject->data) 
+		else if (root->nodeObject->data < key) 
 		{ 
 			root->right_node = DeleteNode(root->right_node, key); 
 			return root;
 		}
 
-		// node has no child
+		// If One Child is Empty
 		if (!root->left_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->right_node;
@@ -85,11 +85,10 @@ namespace TreeType
 			if (successor_Parent != root)
 				successor_Parent->left_node = successor->right_node;
 			else
-				successor_Parent->right_node = successor->left_node;
+				successor_Parent->right_node = successor->right_node;
 
-			root->nodeObject->data = successor->right_node->nodeObject->data;
+			root->nodeObject = successor->nodeObject;
 			successor.reset();
-
 			return root;
 		}
 	}

@@ -32,7 +32,8 @@ namespace Interface
 
 		// Print To console Node Values in Order [Debugging]
 		if (ImGui::Button("Order Tree"))
-			Root->InOrder(Root);
+			SFML::WalkTree(Root, NULL);
+			//Root->InOrder(Root);
 
 		ImGui::End();
 	}
@@ -54,12 +55,15 @@ namespace Interface
 
 	void SFML::WalkTree(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node)
 	{
-		// Recurse Left
-		if (root->left_node)
-			WalkTree(root->left_node, root);
+		// return if root == nullptr
+		if (!root) { return; }
 
 		// Create Objects 
 		CreateChildrenNodes(root, parent_node);
+
+		// Recurse Left
+		if (root->left_node)
+			WalkTree(root->left_node, root);
 
 		// Recurse Right
 		if (root->right_node)
@@ -72,7 +76,7 @@ namespace Interface
 		if (root->dir == TreeType::ROOT && !parent_node)
 		{
 			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << std::endl;
-			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 100), sf::Vector2f(ref_window->getPosition().x, 20), root->dir, 1);
+			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20), sf::Vector2f(ref_window->getPosition().x, 20), root->dir, 1);
 			return;
 		}
 
