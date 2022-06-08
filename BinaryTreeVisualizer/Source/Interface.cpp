@@ -72,26 +72,26 @@ namespace Interface
 
 	void SFML::CreateChildrenNodes(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> parent_node)
 	{
-
+		// if root, set position to top-center screen
 		if (root->dir == TreeType::ROOT && !parent_node)
 		{
 			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << std::endl;
 			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20), sf::Vector2f(ref_window->getPosition().x, 20), root->dir, 1);
 			return;
 		}
-
+		// if left_node off-set from parent node: LEFT
 		if (root->dir == TreeType::LEFT)
 		{
 			std::cout << "Creating Left (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + LEFT_OFFSET, parent_node->nodeObject->position, root->dir, root->level);
 		}
 
+		// if right_node off-set from parent node: RIGHT
 		if (root->dir == TreeType::RIGHT)
 		{
 			std::cout << "Creating Right (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + RIGHT_OFFSET, parent_node->nodeObject->position, root->dir, root->level);
 		}
-
 	}
 
 	bool SFML::Animate()
