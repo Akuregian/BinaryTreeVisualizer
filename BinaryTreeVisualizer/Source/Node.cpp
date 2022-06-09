@@ -3,7 +3,7 @@
 namespace Object
 {
 	Node::Node(int value)
-		: node_object(std::make_shared<sf::CircleShape>()),
+		: node(std::make_shared<sf::CircleShape>()),
 		  connection(NULL),
 	   	  data(value)
 	{
@@ -17,16 +17,16 @@ namespace Object
 	{
 		// CircleShape Node
 		position = pos;
-		node_object->setFillColor(sf::Color::Green);
-		node_object->setPosition(position);
-		node_object->setRadius(SettingsPanel::nRadius);
+		node->setFillColor(sf::Color::Green);
+		node->setPosition(position);
+		node->setRadius(SettingsPanel::nRadius);
 
 		// Text Object
 		text.setFont(font);
 		text.setString(std::to_string(data));
 		sf::FloatRect bounds(text.getLocalBounds());
-		text.setOrigin((bounds.width - node_object->getRadius()) / 2 + bounds.left, (bounds.height - node_object->getRadius()) / 2 +  bounds.top);
-		text.setPosition(node_object->getPosition().x + (node_object->getRadius() /2) ,node_object->getPosition().y + (node_object->getRadius() / 2));
+		text.setOrigin((bounds.width - node->getRadius()) / 2 + bounds.left, (bounds.height - node->getRadius()) / 2 +  bounds.top);
+		text.setPosition(node->getPosition().x + (node->getRadius() /2) ,node->getPosition().y + (node->getRadius() / 2));
 		text.setFillColor(sf::Color::Black);
 		
 		if (dir == 0)
@@ -34,7 +34,7 @@ namespace Object
 
 		int distance_to_other_node = std::sqrt(std::pow(pos.x - parent_pos.x, 2) + std::pow(pos.y - parent_pos.y, 2));
 		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(distance_to_other_node, 5));
-		connection->setPosition(parent_pos.x + node_object->getRadius(), parent_pos.y + node_object->getRadius());
+		connection->setPosition(parent_pos.x + node->getRadius(), parent_pos.y + node->getRadius());
 		connection->setFillColor(sf::Color::Black);
 		if (dir == 2) // right_node
 			connection->rotate(45);

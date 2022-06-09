@@ -3,8 +3,8 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-file(GLOB_RECURSE HEADERS "Headers/*.hpp")
-file(GLOB_RECURSE SRC "Source/*.cpp")
+file(GLOB_RECURSE HEADERS "Headers/*.hpp" "../Utility/*.hpp")
+file(GLOB_RECURSE SRC "Source/*.cpp" )
 
 # Add source to this project's executable.
 add_executable (BinaryTreeVisualizer ${HEADERS} ${SRC})

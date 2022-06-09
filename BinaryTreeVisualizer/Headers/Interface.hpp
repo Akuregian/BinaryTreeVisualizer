@@ -29,6 +29,7 @@ namespace Interface
 		static void DrawLines(std::shared_ptr<TreeType::BinaryTree> root);
 		static void Display(std::shared_ptr<TreeType::BinaryTree> root);
 		static bool Animate();
+		static bool CheckOverlappingNodes(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> check_node);
 
 	private:
 		static sf::Font m_font;
@@ -40,5 +41,8 @@ namespace Interface
 		static sf::RenderWindow* ref_window;
 		static sf::Vector2f LEFT_OFFSET;
 		static sf::Vector2f RIGHT_OFFSET;
+		
+		// Test/Debug
+		static std::shared_ptr<TreeType::BinaryTree> ref_root;
 	};
 }

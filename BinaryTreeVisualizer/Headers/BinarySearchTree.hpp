@@ -16,6 +16,15 @@ namespace TreeType
 	{
 	public:
 		BinaryTree(int data);
+		bool check(std::shared_ptr<BinaryTree>& other) {
+			std::cout << "Operator Called" << std::endl;
+			if (other.get() != this)
+			{
+				std::cout << "Same Node" << std::endl;
+				return true;
+			}
+			return false;
+		}
 		~BinaryTree();
 		
 		// Tree Operations

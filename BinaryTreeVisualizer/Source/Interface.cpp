@@ -14,6 +14,7 @@ namespace Interface
 		ImGui::InputInt("InsertValue", &InsertValue);
 		if (ImGui::Button("Add Node"))
 		{
+			Utility::Timer Timer; // Used to just gauge optimization
 			int ref_level = 0;
 			std::cout << "Added Node" << std::endl;
 			if (!Root) { Root = Root->InsertNode(Root, InsertValue, ref_level); }
@@ -50,6 +51,7 @@ namespace Interface
 	sf::RenderWindow* SFML::ref_window;
 	sf::Vector2f SFML::LEFT_OFFSET(-SettingsPanel::offset, SettingsPanel::offset);
 	sf::Vector2f SFML::RIGHT_OFFSET(SettingsPanel::offset, SettingsPanel::offset);
+	std::shared_ptr<TreeType::BinaryTree> SFML::ref_root;
 
 	SFML::SFML(sf::RenderWindow& window) { ref_window = &window; }
 
@@ -75,23 +77,27 @@ namespace Interface
 		// if root, set position to top-center screen
 		if (root->dir == TreeType::ROOT && !parent_node)
 		{
-			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << std::endl;
+			ref_root = root;
 			root->nodeObject->CreateNode(sf::Vector2f(ref_window->getPosition().x, 20), sf::Vector2f(ref_window->getPosition().x, 20), root->dir, 1);
+			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << " With Pos: (" << root->nodeObject->position.x << "," <<root->nodeObject->position.y << ")" << std::endl;
 			return;
 		}
 		// if left_node off-set from parent node: LEFT
-		if (root->dir == TreeType::LEFT)
+		if (root->dir == TreeType::LEFT && root->nodeObject)
 		{
-			std::cout << "Creating Left (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + LEFT_OFFSET, parent_node->nodeObject->position, root->dir, root->level);
+			CheckOverlappingNodes(ref_root, root);
+			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << " With Pos: (" << root->nodeObject->position.x << "," <<root->nodeObject->position.y << ")" << std::endl;
 		}
 
 		// if right_node off-set from parent node: RIGHT
-		if (root->dir == TreeType::RIGHT)
+		if (root->dir == TreeType::RIGHT && root->nodeObject)
 		{
-			std::cout << "Creating Right (" << root->nodeObject->data << ") Node @ Level " << root->level << std::endl;
 			root->nodeObject->CreateNode(parent_node->nodeObject->position + RIGHT_OFFSET, parent_node->nodeObject->position, root->dir, root->level);
+			CheckOverlappingNodes(ref_root, root);
+			std::cout << "Creating Root(" << root->nodeObject->data << ") Node @ Level " <<root->level << " With Pos: (" << root->nodeObject->position.x << "," <<root->nodeObject->position.y << ")" << std::endl;
 		}
+
 	}
 
 	bool SFML::Animate()
@@ -129,11 +135,34 @@ namespace Interface
 		return false;
 	}
 
+	bool SFML::CheckOverlappingNodes(std::shared_ptr<TreeType::BinaryTree> root, std::shared_ptr<TreeType::BinaryTree> check_node)
+	{
+		if (!root) { return false; }
+
+		if (root->nodeObject->position == check_node->nodeObject->position && root != check_node )
+		{
+			if (root->dir == TreeType::RootDir::LEFT)
+			{
+				ref_root->left_node->nodeObject->node->setPosition(ref_root->left_node->nodeObject->node->getPosition() + sf::Vector2f(-75, 0));
+			}
+			else if (root->dir == TreeType::RootDir::RIGHT);
+			{
+				ref_root->right_node->nodeObject->node->setPosition(ref_root->right_node->nodeObject->node->getPosition() + sf::Vector2f(-75, 0));
+			}
+		}
+
+		if (root->left_node)
+			CheckOverlappingNodes(root->left_node, check_node);
+
+		if (root->right_node)
+			CheckOverlappingNodes(root->right_node, check_node);
+	}
+
 	void SFML::DrawNodes(std::shared_ptr<TreeType::BinaryTree> root)
 	{
 		if (!root) { return; }
 
-		ref_window->draw(*root->nodeObject->node_object);
+		ref_window->draw(*root->nodeObject->node);
 		ref_window->draw(root->nodeObject->text);
 
 		DrawNodes(root->right_node);
