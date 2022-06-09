@@ -7,7 +7,7 @@ Drawing Trees:
 	recurse(left_node) 
 	recurse(right_ode)
 
-		 O
+	     O
 	    / \
  	   O   O
 
