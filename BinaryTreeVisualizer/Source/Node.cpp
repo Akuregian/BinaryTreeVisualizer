@@ -3,8 +3,7 @@
 namespace Object
 {
 	Node::Node(int value)
-		: node(std::make_shared<sf::CircleShape>()),
-		  connection(NULL),
+		: connection(NULL),
 	   	  data(value)
 	{
 		if (!font.loadFromFile("../../../../BinaryTreeVisualizer/Fonts/BodoniFLF-Bold.ttf"))
@@ -15,6 +14,7 @@ namespace Object
 
 	void Node::CreateNode(sf::Vector2f pos, sf::Vector2f parent_pos, int dir, int level)
 	{
+		node = std::make_shared<sf::CircleShape>();
 		// CircleShape Node
 		position = pos;
 		node->setFillColor(sf::Color::Green);

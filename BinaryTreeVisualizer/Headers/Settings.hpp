@@ -6,5 +6,10 @@ namespace SettingsPanel
 
 	// Node Object
 	const unsigned int nRadius = 15;
-	const int offset = 50;
+
+	// Tree Drawing
+	const sf::Vector2f LEFT_OFFSET(-50, 50);
+	const sf::Vector2f RIGHT_OFFSET(50, 50);
+	const sf::Vector2f LEFT_SHIFT(-100, 0);
+	const sf::Vector2f RIGHT_SHIFT(100, 0);
 }

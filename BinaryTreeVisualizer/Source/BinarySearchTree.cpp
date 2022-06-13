@@ -2,13 +2,15 @@
 
 namespace TreeType
 {
-	
+
 	BinaryTree::BinaryTree(int data)
-		: left_node(nullptr), 
-		  right_node(nullptr), 
-		  dir(RootDir::ROOT), 
-		  nodeObject(std::make_shared<Object::Node>(data)), 
-		  level(0)
+		: left_node(nullptr),
+		  right_node(nullptr),
+		  dir(RootDir::ROOT),
+		  nodeObject(std::make_shared<Object::Node>(data)),
+		  level(0),
+		  branch_side(Branch::ROOT_BRANCH),
+		  parent(nullptr)
 	{
 
 	}
@@ -25,16 +27,20 @@ namespace TreeType
 		if (value > root->nodeObject->data) 
 		{ 
 			root->right_node = InsertNode(root->right_node, value, ref_level); 
-			root->right_node->dir = RIGHT; 
+			root->right_node->dir = RootDir::RIGHT; 
+			root->right_node->branch_side = Branch::RIGHT_BRANCH;
 			root->right_node->level = ref_level--;
+			root->right_node->parent = root;
 		}
 
 		// If Value < root.Value : Insert Left
 		if (value < root->nodeObject->data) 
 		{ 
 			root->left_node = InsertNode(root->left_node, value, ref_level);
-			root->left_node->dir = LEFT; 
+			root->left_node->dir = RootDir::LEFT; 
+			root->left_node->branch_side = Branch::LEFT_BRANCH;
 			root->left_node->level = ref_level--;
+			root->left_node->parent = root;
 		}
 
 		return root;
@@ -91,14 +97,6 @@ namespace TreeType
 			successor.reset();
 			return root;
 		}
-	}
-	
-	void BinaryTree::InOrder(std::shared_ptr<BinaryTree> root)
-	{
-		if (!root) { return; }
-		InOrder(root->left_node);
-		std::cout << root->nodeObject->data << std::endl;
-		InOrder(root->right_node);
 	}
 
 }

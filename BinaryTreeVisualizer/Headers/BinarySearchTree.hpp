@@ -12,30 +12,29 @@ namespace TreeType
 		NONE
 	};
 
+	enum Branch
+	{
+		LEFT_BRANCH,
+		RIGHT_BRANCH,
+		ROOT_BRANCH
+	};
+
 	class BinaryTree
 	{
 	public:
 		BinaryTree(int data);
-		bool check(std::shared_ptr<BinaryTree>& other) {
-			std::cout << "Operator Called" << std::endl;
-			if (other.get() != this)
-			{
-				std::cout << "Same Node" << std::endl;
-				return true;
-			}
-			return false;
-		}
 		~BinaryTree();
 		
 		// Tree Operations
 		std::shared_ptr<BinaryTree> InsertNode(std::shared_ptr<BinaryTree> root, int value, int ref_level);
 		std::shared_ptr<BinaryTree> DeleteNode(std::shared_ptr<BinaryTree> root, int key);
-		void InOrder(std::shared_ptr<BinaryTree> root);
 
+		std::shared_ptr<BinaryTree> parent;
 		std::shared_ptr<BinaryTree> left_node;
 		std::shared_ptr<BinaryTree> right_node;
 		std::shared_ptr<Object::Node> nodeObject;
 		RootDir dir;
+		Branch branch_side;
 		int level;
 	};
 }
