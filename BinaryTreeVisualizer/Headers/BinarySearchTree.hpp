@@ -29,6 +29,7 @@ namespace TreeType
 		std::shared_ptr<BinaryTree> InsertNode(std::shared_ptr<BinaryTree> root, int value, int ref_level);
 		std::shared_ptr<BinaryTree> DeleteNode(std::shared_ptr<BinaryTree> root, int key);
 
+		// Root has a Parent, Left & Right Node and an Object to Draw
 		std::shared_ptr<BinaryTree> parent;
 		std::shared_ptr<BinaryTree> left_node;
 		std::shared_ptr<BinaryTree> right_node;

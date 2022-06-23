@@ -27,7 +27,6 @@ namespace Object
 	{
 		node->setFillColor(sf::Color::Green);
 		node->setPosition(position);
-		node->setRadius(SettingsPanel::nRadius);
 
 		// Text Object
 		text.setFont(font);
@@ -38,30 +37,23 @@ namespace Object
 		text.setFillColor(sf::Color::Black);
 	}
 
-	void Node::InitConnectionLine(std::shared_ptr<Node>& parent, int& dir)
+	void Node::InitConnectionLine(std::shared_ptr<Node>& parent)
 	{
-		// If Top Root Node
-		if (dir == 0)
+		if (!parent)
 			return;
 
 		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(DistanceToChildNode(parent->position), 5));
 		connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
 		connection->setFillColor(sf::Color::Black);
-
-		// if right_node
-		if (dir == 2) 
-			connection->rotate(AngleToChildNode(parent->position));
-		// else left_node
-		else 
-			connection->rotate(AngleToChildNode(parent->position));
+		connection->rotate(AngleToChildNode(parent->position));
 	}
 
 	void Node::CreateObject(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir)
 	{
 		// Init CircleShape
-		node = std::make_shared<sf::CircleShape>();
+		node = std::make_shared<sf::CircleShape>(SettingsPanel::nRadius);
 
-		// parent can be null if its the Root node
+		// parent is null if its the Root node
 		if (!parent && dir == 0)
 		{
 			position = sf::Vector2f(SettingsPanel::sWidth / 2, 20);
@@ -80,6 +72,14 @@ namespace Object
 		InitCircleObject(node);
 
 		// Connection Line [RectangleShape]
-		InitConnectionLine(parent, dir);
+		InitConnectionLine(parent);
+	}
+
+	void Node::UpdatePosition(std::shared_ptr<Node>& root, std::shared_ptr<Node>& parent)
+	{
+		position = root->position;
+		node->setPosition(position);
+		text.setPosition(node->getPosition().x + (node->getRadius() / 2), node->getPosition().y + (node->getRadius() / 2));
+		connection->setPosition(parent->node->getPosition().x + node->getRadius(), parent->node->getPosition().y + node->getRadius());
 	}
 }
