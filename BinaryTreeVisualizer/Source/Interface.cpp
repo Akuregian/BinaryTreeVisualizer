@@ -20,6 +20,7 @@ namespace Interface
 			std::cout << "------------Start------------\n";
 			std::cout << "Added Node" << std::endl;
 
+
 			if (!Root) { Root = Root->InsertNode(Root, InsertValue, ref_level); }
 			else { Root->InsertNode(Root, InsertValue, ref_level); }
 
@@ -32,6 +33,23 @@ namespace Interface
 		{
 			Root = Root->DeleteNode(Root, DeleteValue);
 			std::cout << "Deleted Node: " << DeleteValue << std::endl;
+		}
+
+		if (ImGui::Button("Create"))
+		{
+			int ref_level = 0;
+			// Helper so i dont manually have to insert nodes
+			
+			// Tree
+			//std::vector<int> bst_arr = { 25, 15, 30, 23, 35, 16, 11, 20, 18, 17, 19 };
+			
+			std::vector<int> bst_arr = { 30, 28, 32, 26, 34, 24, 36, 22, 38, 20, 40 };
+
+			for (unsigned int i = 0; i < bst_arr.size(); i++)
+			{
+				if (!Root) { Root = Root->InsertNode(Root, bst_arr[i], ref_level); }
+				else { Root->InsertNode(Root, bst_arr[i], ref_level); }
+			}
 		}
 
 		ImGui::End();

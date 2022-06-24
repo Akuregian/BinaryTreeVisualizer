@@ -58,6 +58,18 @@ namespace TreeType
 		return root;
 	}
 
+
+	// In Post Order Traversal
+	void BinaryTree::UpdatePositions(std::shared_ptr<BinaryTree> root)
+	{
+		if (!root) { return; }
+
+		UpdatePositions(root->left_node);
+		UpdatePositions(root->right_node);
+		root->nodeObject->UpdatePosition(root->parent->nodeObject, root->parent->parent->nodeObject);
+
+	}
+
 	// Delete a Node
 	std::shared_ptr<BinaryTree> BinaryTree::DeleteNode(std::shared_ptr<BinaryTree> root, int key)
 	{
@@ -75,18 +87,31 @@ namespace TreeType
 			return root;
 		}
 
+		// Node Has Be found beyond this point: ie. root = node thats needs to be deleted
+
 		// If One Child is Empty
-		if (!root->left_node)
+		if (!root->left_node && !root->right_node)
+		{
+			root.reset();
+			return NULL;
+		}
+		else if (!root->left_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->right_node;
-			temp->nodeObject->UpdatePosition(root->nodeObject, root->parent->nodeObject);
+			//temp->parent = root->parent;
+			// Update All Positions Underneath this node
+			UpdatePositions(temp);
+
 			root.reset();
 			return temp;
 		}
 		else if (!root->right_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->left_node;
-			temp->nodeObject->UpdatePosition(root->nodeObject, root->parent->nodeObject);
+			//temp->parent = root->parent;
+			// Update All Positions Underneath this node
+			UpdatePositions(temp);
+
 			root.reset();
 			return temp;
 		}
@@ -116,5 +141,4 @@ namespace TreeType
 			return root;
 		}
 	}
-
 }

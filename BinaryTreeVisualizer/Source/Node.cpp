@@ -39,8 +39,7 @@ namespace Object
 
 	void Node::InitConnectionLine(std::shared_ptr<Node>& parent)
 	{
-		if (!parent)
-			return;
+		if (!parent) { return; }
 
 		connection = std::make_shared<sf::RectangleShape>(sf::Vector2f(DistanceToChildNode(parent->position), 5));
 		connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
@@ -75,11 +74,12 @@ namespace Object
 		InitConnectionLine(parent);
 	}
 
-	void Node::UpdatePosition(std::shared_ptr<Node>& root, std::shared_ptr<Node>& parent)
+	void Node::UpdatePosition(std::shared_ptr<Node>& parent, std::shared_ptr<Node>& parents_parent)
 	{
-		position = root->position;
+		position = parent->position;
 		node->setPosition(position);
 		text.setPosition(node->getPosition().x + (node->getRadius() / 2), node->getPosition().y + (node->getRadius() / 2));
-		connection->setPosition(parent->node->getPosition().x + node->getRadius(), parent->node->getPosition().y + node->getRadius());
+		connection->setPosition(parents_parent->position.x + node->getRadius(), parents_parent->position.y + node->getRadius());
+		
 	}
 }
