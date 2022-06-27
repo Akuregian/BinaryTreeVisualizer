@@ -17,7 +17,7 @@ namespace Object
 		void  InitConnectionLine(std::shared_ptr<Node>& root);
 		int   DistanceToChildNode(sf::Vector2f parent_pos);
 		float AngleToChildNode(sf::Vector2f parent_pos);
-		void  UpdatePosition(std::shared_ptr<Node>& parent, std::shared_ptr<Node>& parents_parent);
+		void  UpdatePosition(std::shared_ptr<Node>& root, std::shared_ptr<Node>& parent, int dir);
 
 		std::shared_ptr<sf::CircleShape> node;
 		std::shared_ptr<sf::RectangleShape> connection;

@@ -64,9 +64,9 @@ namespace TreeType
 	{
 		if (!root) { return; }
 
+		root->nodeObject->UpdatePosition(root->nodeObject, root->parent->nodeObject, root->dir);
 		UpdatePositions(root->left_node);
 		UpdatePositions(root->right_node);
-		root->nodeObject->UpdatePosition(root->parent->nodeObject, root->parent->parent->nodeObject);
 
 	}
 
@@ -98,20 +98,18 @@ namespace TreeType
 		else if (!root->left_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->right_node;
-			//temp->parent = root->parent;
 			// Update All Positions Underneath this node
+			temp->parent = root->parent;
 			UpdatePositions(temp);
-
 			root.reset();
 			return temp;
 		}
 		else if (!root->right_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->left_node;
-			//temp->parent = root->parent;
+			temp->parent = root->parent;
 			// Update All Positions Underneath this node
 			UpdatePositions(temp);
-
 			root.reset();
 			return temp;
 		}
@@ -130,6 +128,7 @@ namespace TreeType
 			if (parent != root)
 			{
 				parent->left_node = successor->right_node;
+				parent->left_node->parent = parent;
 			}
 			else
 			{
@@ -137,7 +136,9 @@ namespace TreeType
 			}
 
 			root->nodeObject = successor->nodeObject;
+			UpdatePositions(root);
 			successor.reset();
+
 			return root;
 		}
 	}

@@ -20,7 +20,7 @@ namespace Object
 	float Node::AngleToChildNode(sf::Vector2f parent_pos)
 	{
 		// atan2(y2 - y1, x2 - x1) * 180 / PI
-		return std::atan2(position.y - parent_pos.y, position.x -parent_pos.x) * 180 / PI;
+		return std::atan2(position.y - parent_pos.y, position.x - parent_pos.x) * 180 / PI;
 	}
 
 	void Node::InitCircleObject(std::shared_ptr<sf::CircleShape>& node)
@@ -74,12 +74,17 @@ namespace Object
 		InitConnectionLine(parent);
 	}
 
-	void Node::UpdatePosition(std::shared_ptr<Node>& parent, std::shared_ptr<Node>& parents_parent)
+	void Node::UpdatePosition(std::shared_ptr<Node>& root, std::shared_ptr<Node>& parent, int dir)
 	{
-		position = parent->position;
+		if (dir == 1) // left
+			position = parent->position + SettingsPanel::LEFT_OFFSET;
+		else if(dir == 2) // right
+			position = parent->position + SettingsPanel::RIGHT_OFFSET;
+
 		node->setPosition(position);
 		text.setPosition(node->getPosition().x + (node->getRadius() / 2), node->getPosition().y + (node->getRadius() / 2));
-		connection->setPosition(parents_parent->position.x + node->getRadius(), parents_parent->position.y + node->getRadius());
+		connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
+		connection->setRotation(AngleToChildNode(parent->position));
 		
 	}
 }
