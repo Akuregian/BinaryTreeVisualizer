@@ -35,16 +35,16 @@ namespace Interface
 			std::cout << "Deleted Node: " << DeleteValue << std::endl;
 		}
 
-		if (ImGui::Button("Create"))
+		if (ImGui::Button("Create Tree"))
 		{
 			int ref_level = 0;
 			// Helper so i dont manually have to insert nodes
 			
 			// Tree
 			std::vector<int> bst_arr = { 25, 15, 23, 16, 11, 20, 18, 17, 19 };
-			//std::vector<int> bst_arr = { 25, 16, 30, 11, 23, 35, 20, 18, 17, 19 };
-			
-			//std::vector<int> bst_arr = { 30, 28, 32, 26, 34, 24, 36, 22, 38, 20, 40 };
+			//std::vector<int> bst_arr = { 25, 16, 30, 11, 23, 35, 20, 18, 17, 19 }; // tree
+			//std::vector<int> bst_arr = { 30, 28, 32, 26, 34, 24, 36, 22, 38, 20, 40 }; // Only Left and Right / \
+			//std::vector<int> bst_arr = { 50, 25, 65, 15, 75, 10, 20, 67, 80, 14, 23, 66, 22, 24}; // Overlapping
 
 			for (unsigned int i = 0; i < bst_arr.size(); i++)
 			{

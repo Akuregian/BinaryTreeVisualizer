@@ -16,7 +16,10 @@ namespace TreeType
 
 	BinaryTree::~BinaryTree() 
 	{
-
+		nodeObject.reset();
+		right_node.reset();
+		left_node.reset();
+		parent.reset();
 	}
 
 	std::shared_ptr<BinaryTree> BinaryTree::InsertNode(std::shared_ptr<BinaryTree> root, int value, int ref_level)
@@ -53,7 +56,6 @@ namespace TreeType
 			root->left_node->parent = root;
 			root->left_node->nodeObject->CreateObject(root->left_node->nodeObject, root->left_node->parent->nodeObject, RootDir::LEFT);
 		}
-
 		return root;
 	}
 
@@ -95,7 +97,7 @@ namespace TreeType
 		if (!root->left_node && !root->right_node)
 		{
 			root.reset();
-			return NULL;
+			return nullptr;
 		}
 		else if (!root->left_node)
 		{
