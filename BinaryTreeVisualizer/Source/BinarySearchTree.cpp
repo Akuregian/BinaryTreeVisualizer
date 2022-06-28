@@ -127,10 +127,12 @@ namespace TreeType
 
 			if (parent != root)
 			{
-				parent->left_node = successor->right_node;
-				successor->right_node->dir = successor->dir;
-				// ERRORR SOMEWHERE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				parent->left_node->parent = parent;
+				parent->left_node = successor->right_node; //null
+				if (parent->left_node)
+				{
+					parent->left_node->parent = parent;
+					parent->left_node->dir = TreeType::RootDir::LEFT;
+				}
 			}
 			else
 			{
