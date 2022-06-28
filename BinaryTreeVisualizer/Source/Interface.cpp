@@ -41,7 +41,7 @@ namespace Interface
 			// Helper so i dont manually have to insert nodes
 			
 			// Tree
-			std::vector<int> bst_arr = { 25, 15, 30, 23, 35, 16, 11, 20, 18, 17, 19 };
+			std::vector<int> bst_arr = { 25, 15, 23, 16, 11, 20, 18, 17, 19 };
 			//std::vector<int> bst_arr = { 25, 16, 30, 11, 23, 35, 20, 18, 17, 19 };
 			
 			//std::vector<int> bst_arr = { 30, 28, 32, 26, 34, 24, 36, 22, 38, 20, 40 };

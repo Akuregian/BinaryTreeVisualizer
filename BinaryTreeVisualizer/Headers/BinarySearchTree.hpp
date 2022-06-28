@@ -12,13 +12,6 @@ namespace TreeType
 		NONE
 	};
 
-	enum Branch
-	{
-		LEFT_BRANCH,
-		RIGHT_BRANCH,
-		ROOT_BRANCH
-	};
-
 	class BinaryTree
 	{
 	public:
@@ -36,7 +29,6 @@ namespace TreeType
 		std::shared_ptr<BinaryTree> right_node;
 		std::shared_ptr<Object::Node> nodeObject;
 		RootDir dir;
-		Branch branch_side;
 		int level;
 	};
 }

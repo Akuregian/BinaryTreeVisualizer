@@ -74,17 +74,24 @@ namespace Object
 		InitConnectionLine(parent);
 	}
 
-	void Node::UpdatePosition(std::shared_ptr<Node>& root, std::shared_ptr<Node>& parent, int dir)
+	void Node::UpdatePosition(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir)
 	{
-		if (dir == 1) // left
+		if (dir == 0) // root
+			position = sf::Vector2f(SettingsPanel::sWidth / 2, 20);
+		else if (dir == 1 && parent) // left
 			position = parent->position + SettingsPanel::LEFT_OFFSET;
-		else if(dir == 2) // right
+		else if (dir == 2 && parent) // right
 			position = parent->position + SettingsPanel::RIGHT_OFFSET;
 
 		node->setPosition(position);
 		text.setPosition(node->getPosition().x + (node->getRadius() / 2), node->getPosition().y + (node->getRadius() / 2));
-		connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
-		connection->setRotation(AngleToChildNode(parent->position));
-		
+
+		if (parent)
+		{
+			connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
+			connection->setRotation(AngleToChildNode(parent->position));
+		}
+		else
+			connection.reset();
 	}
 }

@@ -9,7 +9,6 @@ namespace TreeType
 		  dir(RootDir::ROOT),
 		  nodeObject(std::make_shared<Object::Node>(data)),
 		  level(0),
-		  branch_side(Branch::ROOT_BRANCH),
 		  parent(nullptr)
 	{
 
@@ -27,6 +26,8 @@ namespace TreeType
 		{ 
 			std::shared_ptr<BinaryTree> temp = std::make_shared<BinaryTree>(value); 
 			temp->nodeObject->CreateObject(temp->nodeObject, NULL, RootDir::ROOT);
+			temp->dir = RootDir::ROOT;
+			temp->level = 0;
 			return temp;
 		}
 		
@@ -38,7 +39,6 @@ namespace TreeType
 		{ 
 			root->right_node = InsertNode(root->right_node, value, ref_level); 
 			root->right_node->dir = RootDir::RIGHT; 
-			root->right_node->branch_side = Branch::RIGHT_BRANCH;
 			root->right_node->level = ref_level--;
 			root->right_node->parent = root;
 			root->right_node->nodeObject->CreateObject(root->right_node->nodeObject, root->right_node->parent->nodeObject, RootDir::RIGHT);
@@ -49,7 +49,6 @@ namespace TreeType
 		{ 
 			root->left_node = InsertNode(root->left_node, value, ref_level);
 			root->left_node->dir = RootDir::LEFT; 
-			root->left_node->branch_side = Branch::LEFT_BRANCH;
 			root->left_node->level = ref_level--;
 			root->left_node->parent = root;
 			root->left_node->nodeObject->CreateObject(root->left_node->nodeObject, root->left_node->parent->nodeObject, RootDir::LEFT);
@@ -64,7 +63,10 @@ namespace TreeType
 	{
 		if (!root) { return; }
 
-		root->nodeObject->UpdatePosition(root->nodeObject, root->parent->nodeObject, root->dir);
+		if (!root->parent)
+			root->nodeObject->UpdatePosition(root->nodeObject, NULL, root->dir);
+		else
+			root->nodeObject->UpdatePosition(root->nodeObject, root->parent->nodeObject, root->dir);
 		UpdatePositions(root->left_node);
 		UpdatePositions(root->right_node);
 
@@ -98,8 +100,9 @@ namespace TreeType
 		else if (!root->left_node)
 		{
 			std::shared_ptr<BinaryTree> temp = root->right_node;
-			// Update All Positions Underneath this node
 			temp->parent = root->parent;
+			temp->dir = root->dir;
+			// Update All Positions Underneath this node
 			UpdatePositions(temp);
 			root.reset();
 			return temp;
@@ -108,6 +111,7 @@ namespace TreeType
 		{
 			std::shared_ptr<BinaryTree> temp = root->left_node;
 			temp->parent = root->parent;
+			temp->dir = root->dir;
 			// Update All Positions Underneath this node
 			UpdatePositions(temp);
 			root.reset();
@@ -136,7 +140,12 @@ namespace TreeType
 			}
 			else
 			{
+				// ERROR SOMEWHERE HERE WHEN DELETING ROOT NODE
 				parent->right_node = successor->right_node;
+				if (parent->dir == RootDir::ROOT)
+				{
+					successor->dir == RootDir::ROOT;
+				}
 			}
 
 			root->nodeObject = successor->nodeObject;
