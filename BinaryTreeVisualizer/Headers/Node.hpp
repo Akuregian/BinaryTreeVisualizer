@@ -12,12 +12,14 @@ namespace Object
 	{
 	public:
 		Node(int value);
-		void  CreateObject(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir);
+		void  CreateObject(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir, int level);
 		void  InitCircleObject(std::shared_ptr<sf::CircleShape>& node);
 		void  InitConnectionLine(std::shared_ptr<Node>& root);
 		int   DistanceToChildNode(sf::Vector2f parent_pos);
 		float AngleToChildNode(sf::Vector2f parent_pos);
-		void  UpdatePosition(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir);
+		void  UpdatePosition(sf::Vector2f position);
+		void  UpdateConnectionLines(std::shared_ptr<Node> parent);
+		void  UpdateRelativePositions(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir);
 
 		std::shared_ptr<sf::CircleShape> node;
 		std::shared_ptr<sf::RectangleShape> connection;

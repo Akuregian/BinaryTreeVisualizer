@@ -47,7 +47,7 @@ namespace Object
 		connection->rotate(AngleToChildNode(parent->position));
 	}
 
-	void Node::CreateObject(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir)
+	void Node::CreateObject(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir, int level)
 	{
 		// Init CircleShape
 		node = std::make_shared<sf::CircleShape>(SettingsPanel::nRadius);
@@ -61,10 +61,14 @@ namespace Object
 		{
 			// Left
 			if (dir == 1)
+			{
 				position = parent->position + SettingsPanel::LEFT_OFFSET;
+			}
 			// Right
-			else if(dir == 2)
+			else if (dir == 2)
+			{
 				position = parent->position + SettingsPanel::RIGHT_OFFSET;
+			}
 		}
 
 		// CircleShape Node
@@ -74,7 +78,26 @@ namespace Object
 		InitConnectionLine(parent);
 	}
 
-	void Node::UpdatePosition(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir)
+	void Node::UpdatePosition(sf::Vector2f pos)
+	{
+		position += pos;
+		std::cout << "Pos: {" << position.x << ", " << position.y << "}\n";
+		node->setPosition(position);
+		text.setPosition(node->getPosition().x + (node->getRadius() / 2), node->getPosition().y + (node->getRadius() / 2));
+	}
+
+	void Node::UpdateConnectionLines(std::shared_ptr<Node> parent)
+	{
+		if (parent)
+		{
+			std::cout << "Parent Pos: {" << parent->position.x << ", " << parent->position.y << "}\n";
+			connection->setSize(sf::Vector2f(DistanceToChildNode(parent->position), 5));
+			connection->setPosition(parent->position.x + node->getRadius(), parent->position.y + node->getRadius());
+			connection->setRotation(AngleToChildNode(parent->position));
+		}
+	}
+
+	void Node::UpdateRelativePositions(std::shared_ptr<Node> root, std::shared_ptr<Node> parent, int dir)
 	{
 		if (dir == 0) // root
 			position = sf::Vector2f(SettingsPanel::sWidth / 2, 20);

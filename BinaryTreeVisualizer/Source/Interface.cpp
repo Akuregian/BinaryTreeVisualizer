@@ -21,8 +21,8 @@ namespace Interface
 			std::cout << "Added Node" << std::endl;
 
 
-			if (!Root) { Root = Root->InsertNode(Root, InsertValue, ref_level); }
-			else { Root->InsertNode(Root, InsertValue, ref_level); }
+			if (!Root) { Root = Root->InsertNode(Root, Root, InsertValue, ref_level); }
+			else { Root->InsertNode(Root, Root, InsertValue, ref_level); }
 
 			std::cout << "------------End--------------\n";
 		}
@@ -38,21 +38,45 @@ namespace Interface
 		if (ImGui::Button("Create Tree"))
 		{
 			int ref_level = 0;
-			// Helper so i dont manually have to insert nodes
-			
-			// Tree
-			std::vector<int> bst_arr = { 25, 15, 23, 16, 11, 20, 18, 17, 19 };
+
+			std::vector<int> bst_arr = { 25, 15, 23, 16, 11, 20, 18, 17, 19, 30, 40, 50 };
+			//std::vector<int> bst_arr = { 25, 15, 23, 28};
 			//std::vector<int> bst_arr = { 25, 16, 30, 11, 23, 35, 20, 18, 17, 19 }; // tree
 			//std::vector<int> bst_arr = { 30, 28, 32, 26, 34, 24, 36, 22, 38, 20, 40 }; // Only Left and Right / \
 			//std::vector<int> bst_arr = { 50, 25, 65, 15, 75, 10, 20, 67, 80, 14, 23, 66, 22, 24}; // Overlapping
 
 			for (unsigned int i = 0; i < bst_arr.size(); i++)
 			{
-				if (!Root) { Root = Root->InsertNode(Root, bst_arr[i], ref_level); }
-				else { Root->InsertNode(Root, bst_arr[i], ref_level); }
+				if (!Root) { Root = Root->InsertNode(Root, Root, bst_arr[i], ref_level); }
+				else 
+				{ 
+					Root->InsertNode(Root, Root,bst_arr[i], ref_level); 
+				}
 			}
-		}
 
+		}
+	//	if (ImGui::Button("Shift Right"))
+	//	{
+	//		Root->ShiftRightTree(Root);
+	//		Root->ShiftConnectionLinesRight(Root);
+	//	}
+
+	//	if (ImGui::Button("Shift Left"))
+	//	{
+	//		Root->ShiftLeftTree(Root);
+	//		Root->ShiftConnectionLinesLeft(Root);
+	//	}
+
+	//	if (ImGui::Button("Print Node Details"))
+	//	{
+	//		Root->PrintNodeDetails(Root);
+	//	}
+
+		if (ImGui::Button("Check Node Distances"))
+		{
+		//	Root->CheckLevelNodeDistances(Root);
+			Root->PrintNodeDetails(Root);
+		}
 		ImGui::End();
 	}
 
